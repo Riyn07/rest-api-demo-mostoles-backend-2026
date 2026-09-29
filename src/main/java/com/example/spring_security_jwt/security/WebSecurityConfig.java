@@ -3,8 +3,10 @@ package com.example.spring_security_jwt.security;
 
 import com.example.spring_security_jwt.security.jwt.AuthEntryPointJwt;
 import com.example.spring_security_jwt.security.jwt.AuthTokenFilter;
+import com.example.spring_security_jwt.security.jwt.JwtUtils;
 import com.example.spring_security_jwt.security.service.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 
@@ -21,11 +23,12 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 public class WebSecurityConfig {
 
     private final UserDetailsServiceImpl userDetailsService;
-
     private final AuthEntryPointJwt unauthorizedHandler;
+    private final JwtUtils jwtUtils;
 
-    private final AuthTokenFilter authenticationJwtTokenFilter;
-
+    @Bean
+    AuthTokenFilter authenticationJwtTokenFilter() {
+        return new AuthTokenFilter(jwtUtils, userDetailsService);
     }
 }
 
